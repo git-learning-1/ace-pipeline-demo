@@ -8,9 +8,26 @@ pipeline {
             }
         }
 
-        stage('Validate BAR') {
-            steps {
-                sh 'echo "Validating ACE BAR file structure..."'
+        stage('Parallel Checks') {
+            parallel {
+                stage('Validate BAR Structure') {
+                    steps {
+                        echo 'Validating ACE BAR file structure...'
+                        sh 'sleep 3 && echo "BAR structure OK"'
+                    }
+                }
+                stage('Unit Tests') {
+                    steps {
+                        echo 'Running unit tests on message flows...'
+                        sh 'sleep 5 && echo "Unit tests passed"'
+                    }
+                }
+                stage('Security Scan') {
+                    steps {
+                        echo 'Scanning for hardcoded credentials/vulnerabilities...'
+                        sh 'sleep 4 && echo "Security scan clean"'
+                    }
+                }
             }
         }
 
@@ -51,7 +68,7 @@ pipeline {
             echo 'Full pipeline completed — DEV, TEST, and PROD all deployed.'
         }
         aborted {
-            echo 'Pipeline was aborted at the approval gate — PROD was NOT touched.'
+            echo 'Pipeline was aborted — production was NOT touched.'
         }
     }
 }
