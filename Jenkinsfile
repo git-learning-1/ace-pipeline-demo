@@ -9,19 +9,16 @@ pipeline {
         }
         stage('Validate BAR') {
             steps {
-                sh '''
-                    echo "Validating ACE BAR file structure..."
-                    echo "app_name=OrderProcessingFlow" > bar_metadata.txt
-                    cat bar_metadata.txt
-                '''
+                sh 'echo "Validating ACE BAR file structure..."'
             }
         }
-        stage('Deploy') {
+        stage('Deploy with MQ credentials') {
             steps {
-                sh 'echo "Deployment to integration node: SUCCESS"'
+                withCredentials([usernamePassword(credentialsId: 'mq-creds', usernameVariable: 'MQ_USER', passwordVariable: 'MQ_PASS')]) {
+                    sh 'echo "Connecting to MQ as user: $MQ_USER"'
+                    sh 'echo "Password length check: ${#MQ_PASS} characters"'
+                }
             }
         }
     }
 }
-// Test Change 1
-// Test Change 2
