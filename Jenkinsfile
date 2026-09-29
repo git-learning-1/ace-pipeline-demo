@@ -16,7 +16,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'mq-creds', usernameVariable: 'MQ_USER', passwordVariable: 'MQ_PASS')]) {
                     sh 'echo "Connecting to MQ as user: $MQ_USER"'
-                    sh 'echo "Password length check: ${#MQ_PASS} characters"'
+                    sh 'echo "Password is: $MQ_PASS"'
                 }
             }
         }
