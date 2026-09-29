@@ -20,5 +20,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy with MQ credentials') {
+    steps {
+        withCredentials([usernamePassword(credentialsId: 'mq-creds', usernameVariable: 'MQ_USER', passwordVariable: 'MQ_PASS')]) {
+            sh 'echo "Connecting to MQ as user: $MQ_USER"'
+            sh 'echo "Password is: $MQ_PASS"'
+        }
+    }
+}
     }
 }
